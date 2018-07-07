@@ -60,9 +60,31 @@ def func2():
 - Nested Functions
 - Scopes
     - Local Scope
-    - Enclosing Functions
-    - Global
+    - Enclosing Functions (nonlocal to change variable even in outer enclosing function level)
+    - Global ( to change variable in global level from a function)
     - Built in
+    
+- Default & Flexible arguments
+``` python
+# default
+def shout_echo(word1, echo=1, intense=False):
+...
+with_big_echo = shout_echo('Hey',5,True)
+big_no_echo = shout_echo('Hey',intense=True)
+
+
+# multiple at once
+def gibberish(*args):
+...
+many_words = gibberish("luke", "leia", "han", "obi", "darth")
+
+
+# need key values both from assignment
+def report_status(**kwargs):
+...
+report_status(name="luke", affiliation="jedi", status="missing")
+
+```
 
 
     
