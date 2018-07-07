@@ -6,6 +6,12 @@
 # intermediate 
 - dicts 
 - pandasintro
+``` python
+# Extract column from DataFrame: col
+col = df['lang']
+# print(list(df.columns.values)) # to print column names in pandas data frame
+# print(df.iloc[0]) # to see first row how it looks
+```
 
 # intermediate_2
 - conditions
