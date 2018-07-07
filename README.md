@@ -4,7 +4,18 @@
 - Numpy
 
 # intermediate 
-- dicts 
+- dicts
+``` python
+langs_count = {}
+col = df['lang'] # say col is a column from df dataframe
+for entry in col:
+    # If the language is in langs_count, add 1
+    if entry in langs_count.keys():
+        langs_count[entry] = langs_count[entry]+1;
+    # Else add the language to langs_count, set the value to 1
+    else:
+        langs_count[entry] = 1
+```
 - pandasintro
 ``` python
 # Extract column from DataFrame: col
