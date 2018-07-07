@@ -57,4 +57,12 @@ def func2():
     num = 6
     print(double_num) 
 ```
+- Nested Functions
+- Scopes
+    - Local Scope
+    - Enclosing Functions
+    - Global
+    - Built in
 
+
+    
