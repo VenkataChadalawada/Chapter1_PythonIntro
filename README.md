@@ -40,3 +40,18 @@ for lab, row in brics.iterrows() :
     brics.loc[lab, "name_length"] = len(row["country"])
 
 brics["name_length"] = brics["country"].apply(len) ```
+
+# Python toolbox 1
+- Functions
+- Tuples & in Functions
+- Functions in dataframs by Pandas
+- Functions - variables in Local & global scope
+``` python def func1():
+    num = 3
+    print(num)
+
+def func2():
+    global num
+    double_num = num * 2
+    num = 6
+    print(double_num) ```
