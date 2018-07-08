@@ -58,6 +58,22 @@ def func2():
     print(double_num) 
 ```
 - Nested Functions
+``` python
+# Define echo
+def echo(n):
+    """Return the inner_echo function."""
+    def inner_echo(word1):
+        """Concatenate n copies of word1."""
+        echo_word = word1 * n
+        return echo_word
+    return inner_echo
+twice = echo(2)
+two = echo(2)('hello') # => we can also do currying
+thrice = echo(3)
+three = echo(3)('hello')
+print(twice('hello'), thrice('hello')) #closures
+print(two, three)
+```
 - Scopes
     - Local Scope
     - Enclosing Functions (nonlocal to change variable even in outer enclosing function level)
