@@ -110,5 +110,23 @@ lambda member: len(member)>6
 lambda item: item+"!!!"
 ```
 - error handling
-
+    - try except
+    ``` python
+    try:
+        col = df[col_name]
+        for entry in col:
+            if entry in cols_count.keys():
+                cols_count[entry] += 1
+            else:
+                cols_count[entry] = 1
+        return cols_count
+    except:
+        print('The DataFrame does not have a '+ col_name + ' column.')
+    ```
+    - raise ValueError
+    ``` python
+     # Raise a ValueError if col_name is NOT in DataFrame
+    if col_name not in df.columns:
+        raise ValueError('The DataFrame does not have a '+col_name+' column.')
+    ```
     
