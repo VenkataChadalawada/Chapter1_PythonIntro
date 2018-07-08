@@ -101,6 +101,12 @@ def report_status(**kwargs):
 report_status(name="luke", affiliation="jedi", status="missing")
 
 ```
-
+- Lambda functions
+``` python
+lambda item1,item2: item1+item2
+lambda member: len(member)>6
+lambda item: item+"!!!"
+```
+- error handling
 
     
