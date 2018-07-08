@@ -41,7 +41,9 @@ for lab, row in brics.iterrows() :
 
 brics["name_length"] = brics["country"].apply(len) 
 ```
-
+columns check in data frame
+ ``` if col_name not in df.columns: 
+ ```
 # Python toolbox 1
 - Functions
 - Tuples & in Functions
