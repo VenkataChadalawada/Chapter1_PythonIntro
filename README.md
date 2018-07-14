@@ -129,4 +129,9 @@ lambda item: item+"!!!"
     if col_name not in df.columns:
         raise ValueError('The DataFrame does not have a '+col_name+' column.')
     ```
+    # Python toolbox 2
+    - user defined functions
+    - iterators
+    - List comprehensions
+    - Generators
     
