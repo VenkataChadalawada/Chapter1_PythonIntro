@@ -135,3 +135,116 @@ lambda item: item+"!!!"
     - List comprehensions
     - Generators
     
+    # Importing Data Python - 1
+    - textfiles
+    ``` javascript
+    import numpy as np
+    import matplotlib.pyplot as plt
+    # Assign filename: file
+    file = 'sea_slug.txt'
+
+    # Import file: data
+    data = np.loadtxt(file, delimiter='\t', dtype=str)
+    ```
+    - Flatfiles CSV
+    ``` javascript
+    import pandas as pd
+    import numpy as np
+    # Assign the filename: file
+    file = 'titanic.csv'
+
+    # Read the first 5 rows of the file into a DataFrame: data
+    data = pd.read_csv(file,nrows=5,header=None).head()
+
+    # Build a numpy array from the DataFrame: data_array
+    data_array = np.array(data)
+    ```
+    - Pickle files
+    ``` javascript
+    import pickle
+    with open('pickled_fruit.pkl', 'rb') as file:
+        data = pickle.load(file)
+    print(data)
+    ```
+    - Excel Spread sheets
+    ``` javascript
+    # Import pandas
+    import pandas as pd
+
+    # Assign spreadsheet filename: file
+    file = 'battledeath.xlsx'
+
+    # Load spreadsheet: xl
+    xl = pd.ExcelFile(file)
+
+    # Print sheet names
+    print(xl.sheet_names)
+    ```
+    - SAS file
+    ``` javascript
+    import pandas as pd
+    # before this ensure you have installed sas7bdat -  pip install sas7bdat
+    from sas7bdat import SAS7BDAT
+    with SAS7BDAT('sales.sas7bdat') as file:
+        df_sas = file.to_data_frame()
+    ```
+    - Stata
+    ``` javascript
+    # Import pandas
+    import pandas as pd
+
+    # Load Stata file into a pandas DataFrame: df
+    df = pd.read_stata('disarea.dta')
+
+    # Print the head of the DataFrame df
+    print(df.head())
+    ```
+
+    - Matlab file
+    ``` javascript
+    import scipy.io
+    import matplotlib.pyplot as plt
+    import numpy as np
+    # Print the keys of the MATLAB dictionary
+    mat = scipy.io.loadmat('albeck_gene_expression.mat')
+    print(mat.keys())
+    data = mat['CYratioCyt'][25, 5:]
+    ```
+    - HDF5
+    ``` javascript
+    import h5py
+    # Get the HDF5 group: group
+    data = h5py.File('LIGO_data.hdf5','r')
+    group = data['strain']
+
+    # Check out keys of group
+    for key in group.keys():
+        print(key)
+
+    # Set variable equal to time series data: strain
+    strain = data['strain']['Strain'].value
+    print(strain[0:5])
+    ```
+    
+    # Importing Data Python - 1 DBs
+    - Querying SQL type DB's
+    
+    ``` javascript
+    from sqlalchemy import create_engine
+    import pandas as pd
+    engine= create_engine('sqlite:///Chinook.sqlite')
+    #table_names = engine.table_names()
+    con = engine.connect()
+    rs = con.execute('SELECT * FROM Album')
+    df = pd.DataFrame(rs.fetchall())
+    con.close()
+    print(df.head())
+    ```
+    - pandas way
+    ``` javascript
+    # Execute query and store records in DataFrame: df
+    df = pd.read_sql_query('SELECT * FROM PlaylistTrack INNER JOIN Track ON PlaylistTrack.TrackId = Track.TrackId WHERE Milliseconds <250000', engine)
+
+    # Print head of DataFrame
+    print(df.head())
+    ```
