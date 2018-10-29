@@ -469,4 +469,378 @@ ORDER BY city, language;
 ```
 
 ### FULL JOIN
+Full join
 
+In this exercise, you'll examine how your results differ when using a full join versus using a left join versus using an inner join with the countries and currencies tables.
+
+You will focus on the North American region and also where the name of the country is missing. Dig in to see what we mean!
+
+Begin with a full join with countries on the left and currencies on the right. The fields of interest have been SELECTed for you throughout this exercise.
+
+Then complete a similar left join and conclude with an inner join.
+
+1 Choose records in which region corresponds to North America or is NULL.
+2. Repeat the same query as above but use a LEFT JOIN instead of a FULL JOIN. Note what has changed compared to the FULL JOIN result!
+
+``` sql
+SELECT name AS country, code, region, basic_unit
+FROM countries
+FULL JOIN currencies
+USING (code)
+WHERE region = 'North America' OR region IS NULL
+ORDER BY region;
+
+
+SELECT name AS country, code, region, basic_unit
+FROM countries
+LEFT JOIN currencies
+USING (code)
+WHERE region = 'North America' OR region IS NULL
+ORDER BY region;
+
+
+SELECT name AS country, code, region, basic_unit
+FROM countries
+INNER JOIN currencies
+USING (code)
+WHERE region = 'North America' OR region IS NULL
+ORDER BY region;
+
+```
+Have you kept an eye out on the different numbers of records these queries returned? The FULL JOIN query returned 17 rows, the OUTER JOIN returned 4 rows, and the INNER JOIN only returned 3 rows. Do these results make sense to you?
+
+
+### Full join (2)
+
+You'll now investigate a similar exercise to the last one, but this time focused on using a table with more records on the left than the right. You'll work with the languages and countries tables.
+
+Begin with a full join with languages on the left and countries on the right. Appropriate fields have been selected for you again here.
+
+
+    Choose records in which countries.name starts with the capital letter 'V' or is NULL.
+    Arrange by countries.name in ascending order to more clearly see the results.
+
+``` sql
+SELECT countries.name, code, languages.name AS language
+FROM languages
+FULL JOIN countries
+USING (code)
+WHERE countries.name LIKE 'V%' OR countries.name IS NULL
+ORDER BY countries.name;
+```
+
+Repeat the same query as above but use a left join instead of a full join. Note what has changed compared to the full join result!
+
+``` sql
+SELECT countries.name, code, languages.name AS language
+FROM languages
+LEFT JOIN countries
+USING (code)
+WHERE countries.name LIKE 'V%' OR countries.name IS NULL
+ORDER BY countries.name;
+```
+Repeat once more, but use an inner join instead of a left join. Note what has changed compared to the full join and left join results.
+``` sql
+SELECT countries.name, code, languages.name AS language
+FROM languages
+INNER JOIN countries
+USING (code)
+WHERE countries.name LIKE 'V%' OR countries.name IS NULL
+ORDER BY countries.name;
+```
+
+### Full Join (3)
+
+
+    Complete a full join with countries on the left and languages on the right.
+    Next, full join this result with currencies on the right.
+    Select the fields corresponding to the country name AS country, region, language name AS language, and basic and fractional units of currency.
+    Use LIKE to choose the Melanesia and Micronesia regions (Hint: 'M%esia').
+
+``` sql
+SELECT c.name AS country, region, l.name AS language,
+       basic_unit, frac_unit
+FROM countries AS c
+FULL JOIN languages AS l
+USING (code)
+FULL JOIN currencies AS cr
+USING (code)
+WHERE region LIKE 'M%esia';
+```
+
+### Cross Join
+This exercise looks to explore languages potentially and most frequently spoken in the cities of Hyderabad, India and Hyderabad, Pakistan.
+
+You will begin with a cross join with cities AS c on the left and languages AS l on the right. Then you will modify the query using an inner join in the next tab
+
+
+    Create the cross join above and select only the city name AS city and language name AS language. (Recall that cross joins do not use ON or USING.)
+    Make use of LIKE and Hyder% to choose Hyderabad in both countries.
+
+``` sql
+SELECT c.name AS city, l.name AS language
+FROM cities AS c        
+CROSS JOIN languages AS l
+WHERE c.name LIKE 'Hyder%';
+```
+
+
+    Create the cross join above and select only the city name AS city and language name AS language. (Recall that cross joins do not use ON or USING.)
+    Make use of LIKE and Hyder% to choose Hyderabad in both countries.
+
+``` sql
+SELECT c.name AS city, l.name AS language
+FROM cities AS c        
+INNER JOIN languages AS l
+ON c.country_code = l.code
+WHERE c.name LIKE 'Hyder%';
+```
+
+### Outer Challenge
+Now that you're fully equipped to use outer joins, try a challenge problem to test your knowledge!
+
+In terms of life expectancy for 2010, determine the names of the lowest five countries and their regions.
+``` sql
+SELECT c.name as country, region, p.life_expectancy as life_exp
+FROM countries as c
+LEFT JOIN populations p
+ON c.code = p.country_code
+WHERE p.year =2010
+ORDER BY life_exp
+LIMIT 5
+
+```
+
+### Union
+
+Near query result to the right, you will see two new tables with names economies2010 and economies2015
+
+Combine these two tables into one table containing all of the fields in economies2010. The economies table is also included for reference.
+Sort this resulting single table by country code and then by year, both in ascending order
+
+``` sql
+-- pick specified columns from 2010 table
+SELECT *
+-- 2010 table will be on top
+FROM economies2010
+-- which set theory clause?
+UNION
+-- pick specified columns from 2015 table
+SELECT *
+-- 2015 table on the bottom
+FROM economies2015
+-- order accordingly
+ORDER BY code, year;
+
+```
+
+### Union (2)
+
+UNION can also be used to determine all occurrences of a field across multiple tables. Try out this exercise with no starter code.
+
+    Determine all (non-duplicated) country codes in either the cities or the currencies table. The result should be a table with only one field called country_code.
+    Sort by country_code in alphabetical order.
+
+``` sql
+SELECT country_code  FROM cities
+UNION
+SELECT code as country_code FROM currencies
+ORDER BY country_code
+
+```
+
+### Union all
+
+As you saw, duplicates were removed from the previous two exercises by using UNION.
+
+To include duplicates, you can use UNION ALL
+
+
+    Determine all combinations (include duplicates) of country code and year that exist in either the economies or the populations tables. Order by code then year.
+    The result of the query should only have two columns/fields. Think about how many records this query should result in.
+    You'll use code very similar to this in your next exercise after the video. Make note of this code after completing it.
+
+
+``` sql
+SELECT code, year
+FROM economies
+UNION ALL
+SELECT country_code as code, year
+FROM populations
+ORDER BY code, year;
+
+```
+Can you spot some duplicates in the query result?
+
+### Intersect
+
+Repeat the previous UNION ALL exercise, this time looking at the records in common for country code and year for the economies and populations tables.
+
+
+    Again, order by code and then by year, both in ascending order.
+    Note the number of records here (given at the bottom of query result) compared to the similar UNION ALL query result (814 records).
+
+``` sql
+SELECT code, year FROM economies
+INTERSECT
+SELECT country_code as code, year FROM populations
+ORDER BY code, year
+
+```
+### Intersect (2)
+
+As you think about major world cities and their corresponding country, you may ask which countries also have a city with the same name as their country name?
+
+``` sql
+
+SELECT name as city  FROM cities
+INTERSECT
+SELECT name as city FROM countries
+```
+### Except
+
+Get the names of cities in cities which are not noted as capital cities in countries as a single field result.
+
+Note that there are some countries in the world that are not included in the countries table, which will result in some cities not being labeled as capital cities when in fact they are.
+
+
+```sql
+SELECT name
+FROM cities
+EXCEPT
+SELECT capital as name
+FROM countries
+ORDER BY name;
+```
+### Except (2)
+
+Now you will complete the previous query in reverse!
+
+Determine the names of capital cities that are not listed in the cities table
+
+
+    Order by capital in ascending order.
+    The cities table contains information about 236 of the world's most populous cities. The result of your query may surprise you in terms of the number of capital cities that DO NOT appear in this list!
+
+``` sql
+
+SELECT capital
+FROM countries
+EXCEPT
+SELECT name as capital
+FROM cities
+ORDER BY capital;
+```
+Is this query surprising, as the instructions suggested?
+
+### SEMI JOIN
+You are now going to use the concept of a semi-join to identify languages spoken in the Middle East.
+step 1
+Flash back to our Intro to SQL for Data Science course and begin by selecting all country codes in the Middle East as a single field result using SELECT, FROM, and WHERE.
+``` sql
+SELECT code FROM countries
+WHERE region LIKE 'Midd%'
+```
+step 2
+
+    Comment out the answer to the previous tab by surrounding it in /* and */. You'll come back to it!
+    Below the commented code, select only unique languages by name appearing in the languages table.
+    Order the resulting single field table by name in ascending order.
+
+``` sql
+SELECT DISTINCT name
+FROM languages
+ORDER BY name
+```
+step 3
+Now combine the previous two queries into one query:
+
+    Add a WHERE IN statement to the SELECT DISTINCT query, and use the commented out query from the first instruction in there. That way, you can determine the unique languages spoken in the Middle East.
+
+Carefully review this result and its code after completing it. It serves as a great example of subqueries, which are the focus of Chapter 4
+
+``` sql
+SELECT DISTINCT name
+FROM languages
+WHERE code IN (SELECT code FROM countries
+WHERE region LIKE 'Midd%')
+ORDER BY name
+```
+
+### Diagnosing problems using anti-join
+
+Another powerful join in SQL is the anti-join. It is particularly useful in identifying which records are causing an incorrect number of records to appear in join queries.
+
+You will also see another example of a subquery here, as you saw in the first exercise on semi-joins. Your goal is to identify the currencies used in Oceanian countries!
+step 1
+Begin by determining the number of countries in countries that are listed in Oceania using SELECT, FROM, and WHERE.
+``` sql
+SELECT count(name) FROM countries
+WHERE continent LIKE 'Ocea%'
+```
+step 2
+
+    Complete an inner join with countries AS c1 on the left and currencies AS c2 on the right to get the different currencies used in the countries of Oceania.
+    Match ON the code field in the two tables.
+    Include the country code, country name, and basic_unit AS currency.
+
+Observe query result and make note of how many different countries are listed here.
+``` sql
+SELECT c1.code,name, basic_unit AS currency FROM countries c1
+INNER JOIN currencies c2
+ON c1.code = c2.code
+WHERE continent LIKE 'Ocea%'
+```
+step 3
+Note that not all countries in Oceania were listed in the resulting inner join with currencies. Use an anti-join to determine which countries were not included!
+
+Use NOT IN and (SELECT code FROM currencies) as a subquery to get the country code and country name for the Oceanian countries that are not included in the currencies table.
+``` sql
+SELECT code, name
+FROM countries
+WHERE continent = 'Oceania'
+  AND code NOT IN
+  (SELECT code
+   FROM currencies);
+```
+my wrong answer !!!!!
+``` sql
+SELECT c1.code, name, basic_unit AS currency FROM countries c1
+INNER JOIN currencies c2
+ON c1.code = c2.code
+WHERE continent LIKE 'Ocea%'
+AND c1.code NOT IN (SELECT code FROM currencies)
+
+```
+### Set theory challenge
+
+Congratulations! You've now made your way to the challenge problem for this third chapter. Your task here will be to incorporate two of UNION/UNION ALL/INTERSECT/EXCEPT to solve a challenge involving three tables.
+
+In addition, you will use a subquery as you have in the last two exercises! This will be great practice as you hop into subqueries more in Chapter 4
+
+
+    Identify the country codes that are included in either economies or currencies but not in populations.
+    Use that result to determine the names of cities in the countries that match the specification in the previous instruction.
+
+``` sql
+-- select the city name
+SELECT name
+-- alias the table where city name resides
+FROM cities AS c1
+-- choose only records matching the result of multiple set theory clauses
+WHERE country_code IN
+(
+    -- select appropriate field from economies AS e
+    SELECT e.code
+    FROM economies AS e
+    -- get all additional (unique) values of the field from currencies AS c2  
+    UNION
+    SELECT c2.code
+    FROM currencies AS c2
+    -- exclude those appearing in populations AS p
+    EXCEPT
+    SELECT p.country_code
+    FROM populations AS p
+);
+
+```
