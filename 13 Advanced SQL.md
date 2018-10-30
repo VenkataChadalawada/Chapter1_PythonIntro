@@ -844,3 +844,75 @@ WHERE country_code IN
 );
 
 ```
+
+### Subquery inside where
+You'll now try to figure out which countries had high average life expectancies (at the country level) in 2015.
+step 1 - Begin by calculating the average life expectancy across all countries for 2015.
+
+
+``` sql
+SELECT AVG(life_expectancy) FROM populations
+WHERE year ='2015'
+```
+step 2 - 
+Select all fields from populations with records corresponding to larger than 1.15 times the average you calculated in the first task for 2015. In other words, change the 100 in the example above with a subquery.
+``` sql
+SELECT * FROM populations WHERE life_expectancy > 1.15 * (
+    SELECT AVG(life_expectancy) FROM populations)
+    AND year =2015
+    ORDER BY life_expectancy DESC LIMIT 10
+
+```
+### Subquery inside where (2)
+Use your knowledge of subqueries in WHERE to get the urban area population for only capital cities.
+``` sql
+-- select the appropriate fields
+SELECT name, country_code, urbanarea_pop
+-- from the cities table
+FROM cities
+-- with city name in the field of capital cities
+WHERE name IN
+  (SELECT capital
+   FROM countries)
+ORDER BY urbanarea_pop DESC;
+```
+
+### Subquery inside select
+In this exercise, you'll see how some queries can be written using either a join or a subquery.
+
+You have seen previously how to use GROUP BY with aggregate functions and an inner join to get summarized information from multiple tables.
+
+The code given in query.sql selects the top nine countries in terms of number of cities appearing in the cities table. Recall that this corresponds to the most populous cities in the world. Your task will be to convert the commented out code to get the same result as the code shown.
+
+``` sql
+SELECT countries.name AS country, COUNT(*) AS cities_num
+FROM cities
+INNER JOIN countries
+ON countries.code = cities.country_code
+GROUP BY country
+ORDER BY cities_num DESC, country
+LIMIT 9;
+
+
+SELECT countries.name AS country,
+  (SELECT COUNT(*)
+   FROM cities
+   WHERE countries.code = cities.country_code) AS cities_num
+FROM countries
+ORDER BY cities_num DESC, country
+LIMIT 9;
+```
+
+### Subquery inside FROM clause
+The last type of subquery you will work with is one inside of FROM.
+
+You will use this to determine the number of languages spoken for each country, identified by the country's local name! (Note this may be different than the name field and is stored in the local_name field.)
+
+
+    Begin by determining for each country code how many languages are listed in the languages table using SELECT, FROM, and GROUP BY.
+    Alias the aggregated field as lang_num.
+    
+``` sql
+
+
+```
